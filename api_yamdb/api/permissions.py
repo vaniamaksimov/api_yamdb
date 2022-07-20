@@ -6,5 +6,7 @@ class IsAdminOrReadOnly(IsAuthenticatedOrReadOnly):
 
     def has_object_permission(self, request, view, obj):
         user = request.user
-        is_admin = User.objects.filter(Q(role__in=('admin', 'superuser')) & Q(id=user.id)).exists()
+        is_admin = User.objects.filter(
+            Q(role__in=('admin', 'superuser')) & Q(id=user.id)
+        ).exists()
         return is_admin

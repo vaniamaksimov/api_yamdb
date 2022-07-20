@@ -17,7 +17,6 @@ class GenreSerializer(ModelSerializer):
 
 class TitlesSerializer(ModelSerializer):
     rating = None # среднее всех ревью
-    description = None # Откуда брать информацию. Из стороннего АПИ?
     genre = GenreSerializer(many=True, read_only=True)
     category = CategoriesSerializer(many=True, read_only=True)
 
