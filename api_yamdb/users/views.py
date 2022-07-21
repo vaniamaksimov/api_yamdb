@@ -41,5 +41,6 @@ class ConfirmRegisteredView(APIView):
         User = get_object_or_404(CustomUser, username=request.data['username'])
         if request.data['confirmation_code'] == User.confirmation_code:
             User.is_active = True
+            User.save()
             token = User.get_tokens_for_user()['access']
             return Response(token, status=status.HTTP_200_OK)
