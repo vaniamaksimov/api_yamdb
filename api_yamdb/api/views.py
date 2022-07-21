@@ -3,7 +3,8 @@ from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
-from reviews.models import Category, Genre, Review, Title, User
+from reviews.models import Category, Genre, Review, Title
+from users.models import CustomUser as User
 from .mixins import ListCreateDestroyViewSet, RetriveUpdateViewSet
 from .permissions import IsAdminOrReadOnly, OwherAdminModeratorOrReadOnly
 from .serializers import (CategoriesSerializer, CommentsSerializer,

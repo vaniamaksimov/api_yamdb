@@ -1,7 +1,7 @@
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, SAFE_METHODS
 from django.db.models import Q
 
-from reviews.models import User
+from users.models import CustomUser as User
 
 
 class IsAdminOrReadOnly(IsAuthenticatedOrReadOnly):

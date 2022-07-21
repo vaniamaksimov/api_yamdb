@@ -3,8 +3,7 @@ from django.db import models
 from core.validators import validate_date
 
 # тут заменить на кастомного юзера
-from django.contrib.auth import get_user_model
-User = get_user_model()
+from users.models import CustomUser
 
 
 class Category(models.Model):
@@ -79,7 +78,7 @@ class Review(models.Model):
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
     # тут кастомный юзер
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.CASCADE,
         related_name='reviews',
         verbose_name='Автор',
@@ -114,7 +113,7 @@ class Comment(models.Model):
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
     # тут кастомный юзер
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.CASCADE,
         related_name='comments',
         verbose_name='Автор',

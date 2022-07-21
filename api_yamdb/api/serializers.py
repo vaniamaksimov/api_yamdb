@@ -5,7 +5,8 @@ from rest_framework.serializers import (CurrentUserDefault, ModelSerializer,
 from rest_framework.validators import UniqueTogetherValidator
 
 
-from reviews.models import Category, Comment, Genre, Review, Title, User
+from reviews.models import Category, Comment, Genre, Review, Title
+from users.models import CustomUser as User
 
 
 class CategoriesSerializer(ModelSerializer):
