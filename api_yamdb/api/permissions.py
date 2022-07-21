@@ -1,5 +1,7 @@
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, SAFE_METHODS, BasePermission
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, SAFE_METHODS
 from django.db.models import Q
+
+from reviews.models import User
 
 
 class IsAdminOrReadOnly(IsAuthenticatedOrReadOnly):
@@ -12,8 +14,8 @@ class IsAdminOrReadOnly(IsAuthenticatedOrReadOnly):
         return is_admin
 
 
-class OwherAdminOrReadOnly(IsAuthenticatedOrReadOnly):
+class OwherAdminModeratorOrReadOnly(IsAuthenticatedOrReadOnly):
 
     def has_object_permission(self, request, view, obj):
         user = request.user
-        return True if (user.role in ('admin', 'moderator', 'superuser') or user == obj.author) else False
+        return (request.method in SAFE_METHODS or (user.role in ('admin', 'moderator', 'superuser') or user == obj.author))

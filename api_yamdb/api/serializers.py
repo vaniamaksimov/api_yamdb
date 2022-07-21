@@ -1,5 +1,11 @@
-from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from django.db.models import Avg
+from rest_framework.serializers import (CurrentUserDefault, ModelSerializer,
+                                        SerializerMethodField,
+                                        SlugRelatedField)
+from rest_framework.validators import UniqueTogetherValidator
+
+
+from reviews.models import Category, Comment, Genre, Review, Title, User
 
 
 class CategoriesSerializer(ModelSerializer):
@@ -22,29 +28,90 @@ class TitlesSerializer(ModelSerializer):
     category = CategoriesSerializer(many=True, read_only=True)
 
     class Meta:
-        fields = ('name', 'year', 'rating', 'description', 'genre', 'category')
-        model = Titles
+        fields = ('name',
+                  'year',
+                  'rating',
+                  'description',
+                  'genre',
+                  'category')
+        model = Title
 
     def get_rating(self, obj):
         return obj.rewiews.aggregate(Avg('score'))
 
 
 class ReviewsSerializer(ModelSerializer):
+    author = SlugRelatedField(read_only=True,
+                              slug_field='username',
+                              default=CurrentUserDefault())
 
     class Meta:
-        fields = ('text', 'author', 'score', 'pub_date')
-        model = Reviews
+        fields = ('text',
+                  'author',
+                  'score',
+                  'pub_date')
+        model = Review
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Review.objects.all(),
+                fields=['author', 'title']
+            )
+        ]
 
 
 class CommentsSerializer(ModelSerializer):
+    author = SlugRelatedField(read_only=True, slug_field='username')
 
     class Meta:
-        fields = ('text', 'author', 'pub_date')
-        model = Comments
+        fields = ('text',
+                  'author',
+                  'pub_date')
+        model = Comment
 
 
 class UserSerializer(ModelSerializer):
 
     class Meta:
-        fields = ('username', 'email', 'first_name', 'last_name', 'bio', 'role')
+        fields = ('username',
+                  'email',
+                  'first_name',
+                  'last_name',
+                  'bio',
+                  'role')
         model = User
+
+
+class UserSerializer(ModelSerializer):
+
+    class Meta:
+        fields = ('username',
+                  'email',
+                  'first_name',
+                  'last_name',
+                  'bio',
+                  'role')
+        model = User
+        validators = [
+            UniqueTogetherValidator(
+                queryset=User.objects.all(),
+                fields=['username', 'email']
+            )
+        ]
+
+
+class UserMeSerializer(ModelSerializer):
+
+    class Meta:
+        fields = ('username',
+                  'email',
+                  'first_name',
+                  'last_name',
+                  'bio',
+                  'role')
+        model = User
+        validators = [
+            UniqueTogetherValidator(
+                queryset=User.objects.all(),
+                fields=['username', 'email']
+            )
+        ]

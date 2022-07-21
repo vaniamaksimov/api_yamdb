@@ -38,7 +38,7 @@ class Title(models.Model):
         blank=True,
         validators=[validate_date]
     )
-    description = models.CharField('Описание', blank=True)
+    description = models.CharField('Описание', max_length=256, blank=True)
     category = models.ForeignKey(
         'Category',
         on_delete=models.SET_NULL,
@@ -112,7 +112,7 @@ class Review(models.Model):
 class Comment(models.Model):
     text = models.TextField('Текст')
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
-    #тут кастомный юзер
+    # тут кастомный юзер
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
