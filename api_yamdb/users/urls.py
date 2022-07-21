@@ -4,7 +4,6 @@ from . import views
 
 app_name = 'users'
 urlpatterns = [
-    path('token/', views.ConfirmRegisteredView.as_view()),
-    path('signup/', views.SignupView.as_view()),
-    path('users/', views.ConfirmRegisteredView.as_view())
-]
+    path('users/', views.SignupView.as_view()),
+    path('auth/token/', views.ConfirmRegisteredView.as_view()),
+    path('auth/signup/', views.SignupView.as_view())]

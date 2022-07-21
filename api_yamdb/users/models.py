@@ -38,13 +38,12 @@ class CustomUser(AbstractUser):
 
         return {
             'access': str(refresh.access_token)}
-    
+
     def is_admin(self):
-        return self.role == admin
-    
+        return self.role == "admin"
+
     def is_moderator(self):
-        return self.role == moderator
-        
+        return self.role == "moderator"
 
     def __str__(self):
         return self.email

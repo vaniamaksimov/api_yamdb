@@ -34,7 +34,6 @@ class SignupView(APIView):
             serializer.save(confirmation_code=confirmation_code)
             return Response(serializer.validated_data,
                             status=status.HTTP_200_OK)
-
         elif request.user.is_admin():
             serializer = AdminCreateUser(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -45,7 +44,7 @@ class SignupView(APIView):
                       subject='confirmation_code', from_email=None)
             serializer.save(confirmation_code=confirmation_code)
             return Response(serializer.validated_data,
-                            status=status.HTTP_200_OK)
+                            status=status.HTTP_201_CREATED)
 
 
 class ConfirmRegisteredView(APIView):
