@@ -13,16 +13,3 @@ if 'api' in project_dir_content and os.path.isdir(api_path):
 else:
     assert False, f'Не найдено приложение `api` в папке {MANAGE_PATH}'
 
-
-# test .md
-default_md = '# api_yamdb\napi_yamdb\n'
-filename = 'README.md'
-assert filename in root_dir_content, (
-    f'В корне проекта не найден файл `{filename}`'
-)
-
-with open(filename, 'r') as f:
-    file = f.read()
-    assert file != default_md, (
-        f'Не забудьте оформить `{filename}`'
-    )

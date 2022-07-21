@@ -62,4 +62,4 @@ class ConfirmRegisteredView(APIView):
             return Response(token, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
