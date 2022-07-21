@@ -34,7 +34,7 @@ class Title(models.Model):
     name = models.CharField('Название', max_length=256)
     year = models.PositiveSmallIntegerField(
         'Год',
-        blank=True,
+        blank=False,
         validators=[validate_date]
     )
     description = models.CharField('Описание', max_length=256, blank=True)
