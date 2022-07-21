@@ -6,7 +6,9 @@ from rest_framework.viewsets import ModelViewSet
 from reviews.models import Category, Genre, Review, Title
 from users.models import CustomUser as User
 from .mixins import ListCreateDestroyViewSet, RetriveUpdateViewSet
-from .permissions import IsAdminOrReadOnly, OwherAdminModeratorOrReadOnly
+from core.permissions import (IsAuthorOrStaffOrReadOnly,
+                              IsAdminOrSuperuser,
+                              IsAdminOrSuperuserOrReadOnly)
 from .serializers import (CategoriesSerializer, CommentsSerializer,
                           GenreSerializer, ReviewsSerializer, TitlesSerializer,
                           UserMeSerializer, UserSerializer)
@@ -39,7 +41,7 @@ class TitlesViewSet(ModelViewSet):
 
 class ReviewsViewSet(ModelViewSet):
     serializer_class = ReviewsSerializer
-    permission_classes = (OwherAdminModeratorOrReadOnly, )
+    # permission_classes = (OwherAdminModeratorOrReadOnly, )
     http_method_names = ['get', 'post', 'patch', 'delete']
 
     def get_queryset(self):
@@ -55,7 +57,7 @@ class ReviewsViewSet(ModelViewSet):
 
 class CommentsViewSet(ModelViewSet):
     serializer_class = CommentsSerializer
-    permission_classes = (OwherAdminModeratorOrReadOnly, )
+    # permission_classes = (OwherAdminModeratorOrReadOnly, )
     http_method_names = ['get', 'post', 'patch', 'delete']
 
     def get_queryset(self):
