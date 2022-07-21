@@ -3,7 +3,7 @@ from rest_framework.filters import SearchFilter
 from rest_framework.viewsets import ModelViewSet
 
 from .mixins import ListCreateDestroyViewSet
-from .permissions import IsAdminOrReadOnly
+from .permissions import IsAdminOrReadOnly, OwherAdminOrReadOnly
 from .serializers import (CategoriesSerializer, CommentsSerializer,
                           GenreSerializer, ReviewsSerializer, TitlesSerializer)
 
@@ -27,11 +27,15 @@ class GenreViewSet(ListCreateDestroyViewSet):
 class TitlesViewSet(ModelViewSet):
     queryset = Titles.objects.all()
     serializer_class = TitlesSerializer
+    permission_classes = (IsAdminOrReadOnly, )
     filter_backends = ('category', 'genre', 'name', 'year')
+    http_method_names = ['get', 'post', 'patch', 'delete']
 
 
 class ReviewsViewSet(ModelViewSet):
     serializer_class = ReviewsSerializer
+    permission_classes = (OwherAdminOrReadOnly, )
+    http_method_names = ['get', 'post', 'patch', 'delete']
 
     def get_queryset(self):
         title_id = self.kwargs.get('title_id')
