@@ -2,8 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from rest_framework_simplejwt.tokens import RefreshToken
-from users.enums import Roles
-
+from .enums import Roles
 
 class CustomUser(AbstractUser):
 

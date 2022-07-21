@@ -34,7 +34,7 @@ class SignupView(APIView):
             serializer.save(confirmation_code=confirmation_code)
             return Response(serializer.validated_data,
                             status=status.HTTP_200_OK)
-        elif request.user.is_admin():
+        elif request.user.is_admin() or request.user.is_staff or request.user.is_superuser:
             serializer = AdminCreateUser(data=request.data)
             serializer.is_valid(raise_exception=True)
             email = serializer.validated_data.get('email')
@@ -52,14 +52,14 @@ class ConfirmRegisteredView(APIView):
     permission_classes = [AllowAny, ]
 
     def post(self, request):
-        if (("username" or "confirmation_code") not in request.data):
-            return (Response(status=status.HTTP_400_BAD_REQUEST))  
-        User = get_object_or_404(CustomUser, username=request.data['username'])
-        if request.data['confirmation_code'] == User.confirmation_code:
-            User.is_active = True
-            User.save()
-            token = User.get_tokens_for_user()['access']
+        if ("username" or "confirmation_code") not in request.data:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        user = get_object_or_404(CustomUser, username=request.data['username'])
+        if request.data['confirmation_code'] == user.confirmation_code:
+            user.is_active = True
+            user.save()
+            token = user.get_tokens_for_user()['access']
             return Response(token, status=status.HTTP_200_OK)
         else:
-            return (Response(status=status.HTTP_400_BAD_REQUEST))
-        return (Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR))
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
