@@ -45,15 +45,21 @@ class SignupView(APIView):
             serializer.save(confirmation_code=confirmation_code)
             return Response(serializer.validated_data,
                             status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_423_LOCKED)
 
 
 class ConfirmRegisteredView(APIView):
     permission_classes = [AllowAny, ]
 
     def post(self, request):
+        if (("username" or "confirmation_code") not in request.data):
+            return (Response(status=status.HTTP_400_BAD_REQUEST))  
         User = get_object_or_404(CustomUser, username=request.data['username'])
         if request.data['confirmation_code'] == User.confirmation_code:
             User.is_active = True
             User.save()
             token = User.get_tokens_for_user()['access']
             return Response(token, status=status.HTTP_200_OK)
+        else:
+            return (Response(status=status.HTTP_400_BAD_REQUEST))
+        return (Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR))
