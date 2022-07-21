@@ -6,5 +6,5 @@ app_name = 'users'
 urlpatterns = [
     path('token/', views.ConfirmRegisteredView.as_view()),
     path('signup/', views.SignupView.as_view()),
-    path('users/', views.CreateUserAdmView.as_view())
+    path('users/', views.ConfirmRegisteredView.as_view())
 ]
