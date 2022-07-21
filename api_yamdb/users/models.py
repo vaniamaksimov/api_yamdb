@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from rest_framework_simplejwt.tokens import RefreshToken
+from users.enums import Roles
 
 
 class CustomUser(AbstractUser):
@@ -18,12 +19,14 @@ class CustomUser(AbstractUser):
     username = models.CharField(
         unique=True,
         max_length=150,
-        validators=[username_validator, ]
+        validators=[username_validator, ], required=False
     )
-    email = models.EmailField(max_length=254, unique=True)
+    email = models.EmailField(max_length=254, unique=True, required=False)
     first_name = models.CharField(max_length=150, blank=True)
     last_name = models.CharField(max_length=150, blank=True)
     bio = models.TextField(blank=True)
+    role = models.CharField(("role"), choice=Roles.choices(), default="user")
+    confirmation_code = models.CharField(max_length=36, blank=True)
     is_active = models.BooleanField(default=False)
     is_moderator = models.BooleanField(('moderator'), default=False,)
     is_admin = models.BooleanField(('admin'), default=False,)

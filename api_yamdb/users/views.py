@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 import random
 import string
 
-from .serializers import SignupSerializer
+from .serializers import SignupSerializer, AdminCreateUser
 from .models import CustomUser
 
 
@@ -23,15 +23,29 @@ class SignupView(APIView):
     permission_classes = [AllowAny, ]
 
     def post(self, request):
-        serializer = SignupSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        email = serializer.validated_data.get('email')
-        confirmation_code = get_confirmation_code()
-        send_mail(recipient_list=[email],
-                  message=f'confirmation_code: {confirmation_code}',
-                  subject='confirmation_code', from_email=None)
-        serializer.save(confirmation_code=confirmation_code)
-        return Response(serializer.validated_data, status=status.HTTP_200_OK)
+        if request.user.is_anonymous:
+            serializer = SignupSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            email = serializer.validated_data.get('email')
+            confirmation_code = get_confirmation_code()
+            send_mail(recipient_list=[email],
+                      message=f'confirmation_code: {confirmation_code}',
+                      subject='confirmation_code', from_email=None)
+            serializer.save(confirmation_code=confirmation_code)
+            return Response(serializer.validated_data,
+                            status=status.HTTP_200_OK)
+
+        elif request.user.is_admin():
+            serializer = AdminCreateUser(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            email = serializer.validated_data.get('email')
+            confirmation_code = get_confirmation_code()
+            send_mail(recipient_list=[email],
+                      message=f'confirmation_code: {confirmation_code}',
+                      subject='confirmation_code', from_email=None)
+            serializer.save(confirmation_code=confirmation_code)
+            return Response(serializer.validated_data,
+                            status=status.HTTP_200_OK)
 
 
 class ConfirmRegisteredView(APIView):
